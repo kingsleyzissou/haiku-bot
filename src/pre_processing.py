@@ -1,6 +1,7 @@
 import re
 import string
 import spacy
+import syllapy
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -24,10 +25,8 @@ def remove_punctiation(text):
     """
     Remove punctiation from piece of text
     """
-    text = text.split()
     text = [t for t in text if t not in string.punctuation]
-    text = " ".join(text)
-    text = text.replace('...', '')
+    text = [t for t in text if t not in ['...']]
     return text
 
 def remove_other(text):
@@ -44,14 +43,17 @@ def tokenize(text):
     """
     Get the nlp tokens
     """
-    return nlp(text)
+    return [t.text for t in nlp(text)]
 
 def pre_process(text):
     """
     Pre-processing pipeline to return
     a clean, tokenized piece of text
+    and the associated syllables
     """
     text = remove_emojis(text)
-    text = remove_punctiation(text)
     text = remove_other(text)
-    return tokenize(text)
+    text = tokenize(text)
+    text = remove_punctiation(text)
+    syllables = [syllapy.count(t) for t in text]
+    return text, syllables
