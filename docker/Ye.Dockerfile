@@ -5,7 +5,6 @@ COPY src/pre_processing.py /src/
 COPY src/post_processing.py /src/
 COPY src/twitter.py /src/
 COPY src/ye.py /src/
-COPY .env ./
 
 COPY requirements.txt /tmp
 
