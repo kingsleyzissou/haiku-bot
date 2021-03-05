@@ -71,5 +71,13 @@ def check_sequence(items):
             third_count = get_count(third)
     ## this condition checks if each line of the haiku is a match
     if (first_count == 5 and second_count == 7 and third_count == 5):
+        ## rule-based exclusion
+        exclude = [
+            'the', 'my', 'in', 'to', 'for', 'what', 
+            'when', 'where', 'whenever', 'it', 'by',
+            'and', 'we', 'he', 'they', 'I', 'of'
+        ]
+        if third[-1:][0].lower() in exclude:
+            return DEFAULT_RESPONSE[:4]
         return True, first, second, third
     return DEFAULT_RESPONSE[:4]
