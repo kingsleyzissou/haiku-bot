@@ -1,6 +1,6 @@
 import syllapy
 
-DEFAULT_RESPONSE = False, [], [], []
+DEFAULT_RESPONSE = False, [], [], [], None
 
 def get_count(items):
     """
@@ -29,9 +29,14 @@ def extract_haiku(text, strict = False):
     :strict: when strict mode is disabled the entire text is checked if it contains a haiku, 
              otherwise the whole body of text has to be a match
     """
-    cond, first, second, third = DEFAULT_RESPONSE
+    cond, first, second, third, handle = DEFAULT_RESPONSE
     sylls = get_count(text)
     items = text.copy()
+    if sylls == 0:
+        return DEFAULT_RESPONSE
+    if items[0] == 'RT':
+        items.pop(0)
+        handle = items.pop(0)
     if sylls < 17:
         return DEFAULT_RESPONSE
     if strict and sylls != 17:
@@ -39,7 +44,7 @@ def extract_haiku(text, strict = False):
     while(not cond and len(items) > 0):
         cond, first, second, third = check_sequence(items)
         items.pop(0)
-    return cond, first, second, third
+    return cond, first, second, third, handle
 
 def check_sequence(items):
     """
@@ -58,13 +63,21 @@ def check_sequence(items):
         if (first_count < 5):
             first.append(clone.pop(0))
             first_count = get_count(first)
-        if (first_count == 5 and second_count < 7):
+        if (first_count == 5 and second_count < 7 and len(clone) > 0):
             second.append(clone.pop(0))
             second_count = get_count(second)
-        if (first_count == 5 and second_count == 7 and third_count < 5):
+        if (first_count == 5 and second_count == 7 and third_count < 5 and len(clone) > 0):
             third.append(clone.pop(0))
             third_count = get_count(third)
     ## this condition checks if each line of the haiku is a match
     if (first_count == 5 and second_count == 7 and third_count == 5):
+        ## rule-based exclusion
+        exclude = [
+            'the', 'my', 'in', 'to', 'for', 'what', 
+            'when', 'where', 'whenever', 'it', 'by',
+            'and', 'we', 'he', 'they', 'I', 'of'
+        ]
+        if third[-1:][0].lower() in exclude:
+            return DEFAULT_RESPONSE[:4]
         return True, first, second, third
-    return DEFAULT_RESPONSE
+    return DEFAULT_RESPONSE[:4]
