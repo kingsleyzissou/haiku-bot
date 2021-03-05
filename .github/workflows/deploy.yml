@@ -30,20 +30,27 @@ jobs:
           key: ${{ secrets.TWITTER_BOTS }}
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      #           config: ${{ secrets.CONFIG }} # ssh_config; optional
-      - name: scp files to server
-        run: scp -r ./src/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
-      - name: build docker container and run
+
+      - name: copy files and build docker (ye)
         run: |
+          scp -r ./src/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           ssh ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com
+          touch .env
+          echo CONSUMER_KEY = ${{ secrets.CONSUMER_KEY }} > .env
+          echo CONSUMER_SECRET = ${{ secrets.CONSUMER_SECRET }} > .env
+          echo ACCESS_TOKEN = ${{ secrets.YE_TOKEN }} > .env
+          echo ACCESS_SECRET_TOKEN = ${{ secrets.YE_SECRET }} > .env
           docker build -f docker/Ye.Dockerfile -t ye-bot .
           docker run ye-bot
 
-      - name: scp files to server
+      - name: copy files and build docker (haiku)
         run: |
           scp -r ./src/ ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
-      - name: build docker container and run
-        run: |
           ssh ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com
+          touch .env
+          echo CONSUMER_KEY = ${{ secrets.CONSUMER_KEY }} > .env
+          echo CONSUMER_SECRET = ${{ secrets.CONSUMER_SECRET }} > .env
+          echo ACCESS_TOKEN = ${{ secrets.HAIKU_TOKEN }} > .env
+          echo ACCESS_SECRET_TOKEN = ${{ secrets.HAIKU_SECRET }} > .env
           docker build -f docker/Haiku.Dockerfile -t haiku-bot .
           docker run haiku-bot
