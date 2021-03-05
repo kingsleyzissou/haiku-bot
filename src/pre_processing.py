@@ -27,6 +27,7 @@ def remove_punctiation(text):
     """
     text = [t for t in text if t not in string.punctuation]
     text = [t for t in text if t not in ['...']]
+    text = [re.sub(r'[^\w\s]', '', (t)) for t in text]
     return text
 
 def remove_other(text):
