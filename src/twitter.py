@@ -1,8 +1,9 @@
 import tweepy
-import logger
+import logging
 import os
 from dotenv import load_dotenv, find_dotenv
 
+logger = logging.getLogger()
 load_dotenv(find_dotenv())
 
 consumer_key = os.getenv("CONSUMER_KEY")
