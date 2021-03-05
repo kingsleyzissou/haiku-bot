@@ -27,7 +27,7 @@ jobs:
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2.2.0
         with:
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.TWITTER_BOTS }}
           name: id_rsa 
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 #           config: ${{ secrets.CONFIG }} # ssh_config; optional
@@ -47,4 +47,3 @@ jobs:
               ssh ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com
               docker build -f docker/Haiku.Dockerfile -t haiku-bot .
               docker run haiku-bot
-
