@@ -36,7 +36,7 @@ jobs:
           scp -r ./src/ ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
           scp -r ./docker/ ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
           scp requirements.txt ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
-          ssh -t ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com \
+          ssh -tt ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com \
           "docker build -f docker/Haiku.Dockerfile -t haiku-bot . && \
           docker run -it haiku-bot"
 
@@ -45,6 +45,6 @@ jobs:
           scp -r ./src/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           scp -r ./docker/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           scp requirements.txt ./ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
-          ssh -t ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com \
+          ssh -tt ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com \
           "docker build -f docker/Ye.Dockerfile -t ye-bot . && \
           docker run -it ye-bot"
