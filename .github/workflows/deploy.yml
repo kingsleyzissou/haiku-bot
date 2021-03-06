@@ -47,7 +47,7 @@ jobs:
           scp -r ./src/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           ssh -t ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com
           docker build -f docker/Ye.Dockerfile -t ye-bot .
-          docker run -it -e CONSUMER_KEY=${{ secrets.CONSUMER_KEY }} \
+          docker run -i -d -e CONSUMER_KEY=${{ secrets.CONSUMER_KEY }} \
           -e CONSUMER_SECRET=${{ secrets.CONSUMER_SECRET }} \
           -e ACCESS_TOKEN=${{ secrets.YE_TOKEN }} \
           -e ACCESS_TOKEN_SECRET=${{ secrets.YE_SECRET }} \
