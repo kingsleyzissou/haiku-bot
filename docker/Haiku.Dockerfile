@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /src/
 
-CMD ["python3", "test.py"]
+CMD ["python3", "haiku.py"]
