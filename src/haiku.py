@@ -8,23 +8,6 @@ from haiku_detection import extract_haiku
 
 logger = logging.getLogger()
 
-# def get_tweet_text(api, id):
-#   api.get
-
-
-def get_tweets(api, query):
-    return Cursor(
-        api.search,
-        q=query,
-        geocode='-22.9122,-43.2302,1km'
-    ).items(10)
-    # return api.user_timeline(
-    #     screen_name=user_id,
-    #     count=200,
-    #     include_rts=False,
-    #     tweet_mode='extended'
-    # )
-
 
 def format_haiku(haiku, user):
     first = post_process(haiku[1])
@@ -51,9 +34,6 @@ class HaikuListener(StreamListener):
         text = pre_process(text)[0]
         haiku = extract_haiku(text, True)
         res = haiku[0]
-        if (res):
-            print(tweet.id)
-            print(format_haiku(haiku, tweet.user.screen_name))
         if res & (not tweet.favorited):
             if tweet.in_reply_to_status_id is not None or \
                     tweet.user.id == self.me.id:
@@ -65,7 +45,8 @@ class HaikuListener(StreamListener):
                 logger.error('Error favouriting haiku', exc_info=True)
         if res:
             try:
-                haiku = format_haiku(haiku, tweet.user)
+                haiku = format_haiku(haiku, tweet.user.screen_name)
+                logger.info('Found a haiku')
                 self.api.update_status(haiku, tweet.id)
             except Exception as e:
                 logger.error('Error replying to tweet', exc_info=True)
@@ -80,21 +61,11 @@ def main(api, hashtags):
     stream.filter(track=hashtags, languages=['en'])
 
 
-def alt(api):
-    user_id = 'kanyewest'
-    tweets = get_tweets(api, user_id)
-    text = [pre_process(t.full_text)[0] for t in tweets]
-    haikus = [extract_haiku(t) for t in text]
-    tweets = [t for t, h in zip(tweets, haikus) if h[0]]
-    haikus = [h for h in haikus if h[0]]
-    pretty = format_haiku(haikus[3], tweets[3].user)
-    print(pretty)
-
-
 if __name__ == '__main__':
-    hashtags = [
+    topics = [
         'Python', 'Django', 'Node.js', 'GraphQL',
-        'React', 'TypeScript', 'Java', 'Golang',
-        'Kotlin', 'Serverless', 'AWS'
+        'React.js', 'TypeScript', 'Java', 'Golang',
+        'Kotlin', 'Serverless', 'AWS', 'Vue', 'Nuxt',
+        'Next.js', 'Nuxt.js', 'Programming', 'Debugging'
     ]
-    main(create_api(), hashtags)
+    main(create_api(), topics)
