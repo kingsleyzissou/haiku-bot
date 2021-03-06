@@ -80,4 +80,4 @@ def alt(api):
 
 
 if __name__ == "__main__":
-    alt(create_api())
+    main(create_api())
