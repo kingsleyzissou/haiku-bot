@@ -36,6 +36,10 @@ class YeListener(StreamListener):
             # Ignore retweets
             return
         logger.info(f"Processing tweet id {tweet.id}")
+        if not tweet.truncated:
+            text = tweet.text
+        else:
+            text = tweet.extended_tweet['full_text']
         text = pre_process(tweet.full_text)
         haiku = extract_haiku(text, True)
         res = haiku[0]
@@ -51,7 +55,7 @@ class YeListener(StreamListener):
         if res:
             try:
                 haiku = format_haiku(haiku)
-                api.update_status(haiku, tweet.id)
+                self.api.update_status(haiku, tweet.id)
             except Exception as e:
                 logger.error("Error replying to tweet", exc_info=True)
 
@@ -59,8 +63,21 @@ class YeListener(StreamListener):
         logger.error(status)
 
 
-if __name__ == "__main__":
-    listener = StreamListener()
-    api = create_api()
+def main(api):
+    listener = YeListener(api)
     stream = Stream(api.auth, listener)
     stream.filter(follow=['kanyewest'])
+
+
+def alt(api):
+    user_id = "kanyewest"
+    tweets = get_tweets(api, user_id)
+    text = [pre_process(t.full_text)[0] for t in tweets]
+    haikus = [extract_haiku(t) for t in text]
+    haikus = [h for h in haikus if h[0]]
+    pretty = format_haiku(haikus[3])
+    print(pretty)
+
+
+if __name__ == "__main__":
+    alt(create_api())

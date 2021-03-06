@@ -98,9 +98,3 @@ if __name__ == '__main__':
         'Kotlin', 'Serverless', 'AWS'
     ]
     main(create_api(), hashtags)
-    # api = create_api()
-    # tweets = get_tweets(api, 'python')
-    # for t in tweets:
-    #     print(t.full_text)
-    #     print(t.user)
-    #     print(' ')
