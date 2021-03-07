@@ -1,10 +1,6 @@
 FROM python:3
 
-COPY src/haiku_detection.py /src/
-COPY src/pre_processing.py /src/
-COPY src/post_processing.py /src/
-COPY src/twitter.py /src/
-COPY src/haiku.py /src/
+COPY . .
 
 COPY requirements.txt /tmp
 
