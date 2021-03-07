@@ -33,26 +33,16 @@ jobs:
 
       - name: copy files and build docker (haiku)
         run: |
-          scp -r ./src/ ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
-          scp -r ./docker/ ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
-          scp requirements.txt ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
+          rsync rsh=ssh -r . ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com:.
           ssh -tt ubuntu@ec2-3-249-242-117.eu-west-1.compute.amazonaws.com \
-          "docker build -f docker/Haiku.Dockerfile -t haiku-bot . && \
-          docker run -it -d -e CONSUMER_KEY=${{ secrets.CONSUMER_KEY }} \
-          -e CONSUMER_SECRET=${{ secrets.CONSUMER_SECRET }} \
-          -e ACCESS_TOKEN=${{ secrets.HAIKU_TOKEN }} \
-          -e ACCESS_TOKEN_SECRET=${{ secrets.HAIKU_SECRET }} \
-          haiku-bot"
+          "docker-compose -f ./docker-compose.hk.yml down && \
+          docker-compose -f ./docker-compose.hk.yml build && \
+          docker-compose -f ./docker-compose.hk.yml up -d"
 
       - name: copy files and build docker (ye)
         run: |
-          scp -r ./src/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
-          scp -r ./docker/ ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
-          scp requirements.txt ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
+          rsync rsh=ssh -r . ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           ssh -tt ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com \
-          "docker build -f docker/Ye.Dockerfile -t ye-bot . && \
-          docker run -it -d -e CONSUMER_KEY=${{ secrets.CONSUMER_KEY }} \
-          -e CONSUMER_SECRET=${{ secrets.CONSUMER_SECRET }} \
-          -e ACCESS_TOKEN=${{ secrets.YE_TOKEN }} \
-          -e ACCESS_TOKEN_SECRET=${{ secrets.YE_SECRET }} \
-          ye-bot"
+          "docker-compose -f ./docker-compose.ye.yml down && \
+          docker-compose -f ./docker-compose.ye.yml build && \
+          docker-compose -f ./docker-compose.ye.yml up -d"
