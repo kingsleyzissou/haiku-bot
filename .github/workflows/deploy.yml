@@ -33,7 +33,7 @@ jobs:
 
       - name: copy files and build docker (ye)
         run: |
-          rsync  -r . ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
+          rsync -r . ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com:.
           ssh -tt ubuntu@ec2-3-249-85-209.eu-west-1.compute.amazonaws.com \
           "docker-compose -f ./docker-compose.ye.yml down && \
           docker-compose -f ./docker-compose.ye.yml up --build -d"

@@ -2,10 +2,13 @@ import re
 import string
 import spacy
 import syllapy
+import logging
 
 nlp = spacy.load('en_core_web_sm')
 nlp.tokenizer.rules = {key: value for key, value in nlp.tokenizer.rules.items(
 ) if "'" not in key and "’" not in key and "‘" not in key}
+
+logger = logging.getLogger()
 
 
 def remove_emojis(text):
@@ -57,7 +60,10 @@ def tokenize(text):
                 0 and "'" in token.text]
     with text.retokenize() as retokenizer:
         for pos in position:
-            retokenizer.merge(text[pos-1:pos+1])
+            try:
+                retokenizer.merge(text[pos-1:pos+1])
+            except Exception as e:
+                logger.error('Error retokenizing text', exc_info=True)
     return [t.text for t in text]
 
 
