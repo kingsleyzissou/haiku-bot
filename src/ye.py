@@ -48,10 +48,6 @@ class YeListener(StreamListener):
                     tweet.user.id == self.me.id:
                 # This tweet is a reply or I'm its author so, ignore it
                 return
-            try:
-                tweet.favorite()
-            except Exception as e:
-                logger.error("Error favouriting haiku", exc_info=True)
         if res:
             try:
                 haiku = format_haiku(haiku)

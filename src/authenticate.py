@@ -8,8 +8,8 @@ load_dotenv(find_dotenv())
 
 consumer_key = os.getenv("CONSUMER_KEY")
 consumer_secret = os.getenv("CONSUMER_SECRET")
-access_token = os.getenv("ACCESS_TOKEN")
-access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
+# access_token = os.getenv("ACCESS_TOKEN")
+# access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
 
 token = os.getenv("BEARER")
 
@@ -28,3 +28,4 @@ if __name__ == "__main__":
     auth.get_access_token(verifier)
     print('ACCESS_TOKEN = "%s"' % auth.access_token)
     print('ACCESS_TOKEN_SECRET = "%s"' % auth.access_token_secret)
+    auth.set_access_token(auth.access_token, auth.access_token_secret)
