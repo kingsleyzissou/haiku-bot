@@ -9,12 +9,12 @@ from haiku_detection import extract_haiku
 logger = logging.getLogger()
 
 
-def format_haiku(haiku, user):
+def format_haiku(haiku):
     first = post_process(haiku[1])
     second = post_process(haiku[2])
     third = post_process(haiku[3])
     sign = '\t - Infinite Loop Haikus'
-    return f'@{user}\n{first}\n{second}\n{third}\n{sign}'
+    return f'{first}\n{second}\n{third}\n{sign}'
 
 
 class HaikuListener(StreamListener):
@@ -39,15 +39,11 @@ class HaikuListener(StreamListener):
                     tweet.user.id == self.me.id:
                 # This tweet is a reply or I'm its author so, ignore it
                 return
-            try:
-                tweet.favorite()
-            except Exception as e:
-                logger.error('Error favouriting haiku', exc_info=True)
         if res:
             try:
-                haiku = format_haiku(haiku, tweet.user.screen_name)
+                haiku = format_haiku(haiku)
                 logger.info('Found a haiku')
-                self.api.update_status(haiku, tweet.id)
+                self.api.update_status(haiku)
             except Exception as e:
                 logger.error('Error replying to tweet', exc_info=True)
 
@@ -68,4 +64,5 @@ if __name__ == '__main__':
         'Kotlin', 'Serverless', 'AWS', 'Vue', 'Nuxt',
         'Next.js', 'Nuxt.js', 'Programming', 'Debugging'
     ]
+    api = create_api()
     main(create_api(), topics)
