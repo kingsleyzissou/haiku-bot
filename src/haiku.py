@@ -1,5 +1,6 @@
 import logging
 import numpy as np
+import time
 from tweepy import Cursor, Stream, StreamListener
 from twitter import create_api
 from pre_processing import pre_process
@@ -44,6 +45,7 @@ class HaikuListener(StreamListener):
                 haiku = format_haiku(haiku)
                 logger.info('Found a haiku')
                 self.api.update_status(haiku)
+                time.sleep(60 * 120)
             except Exception as e:
                 logger.error('Error replying to tweet', exc_info=True)
 
